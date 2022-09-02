@@ -12,8 +12,8 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     start = time.time()
-    datasetReader = img_loader(r'C:\Users\fuchi\Desktop\working\abc')
-    dataloader = DataLoader(datasetReader, batch_size=512, shuffle=False, pin_memory=True, num_workers=12)
+    # datasetReader = img_loader(r'C:\Users\fuchi\Desktop\working\abc')
+    # dataloader = DataLoader(datasetReader, batch_size=512, shuffle=False, pin_memory=True, num_workers=12)
 
     num_vec = 0
     dim_vec = 4096
