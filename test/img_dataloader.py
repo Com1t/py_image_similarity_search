@@ -12,14 +12,15 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     start = time.time()
-    # datasetReader = img_loader(r'C:\Users\fuchi\Desktop\working\abc')
-    # dataloader = DataLoader(datasetReader, batch_size=512, shuffle=False, pin_memory=True, num_workers=12)
+    datasetReader = img_loader(r'C:\Users\fuchi\Desktop\working\Buffer')
+    dataloader = DataLoader(datasetReader, batch_size=512, shuffle=False, num_workers=12)
 
     num_vec = 0
     dim_vec = 4096
     detections_batch = []
     for i, (batch) in enumerate(dataloader):
         num_vec += len(batch[1])
+        print("read ", num_vec)
 
     hash_cal_end = time.time()
     print(f"FPS per sec {num_vec / (hash_cal_end - start)}")

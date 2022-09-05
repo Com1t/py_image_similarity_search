@@ -1,0 +1,36 @@
+ABC torch loader
+FPS per sec 11.025309473397757
+Hash calculation time:  94.78191995620728
+
+Process finished with exit code 0
+
+ABC fast loader
+FPS per sec 139.79132058751009
+Hash calculation time:  7.475428342819214
+
+Process finished with exit code 0
+
+Buffer torch loader
+FPS per sec 97.1055319219373
+Hash calculation time:  340.87656331062317
+
+Process finished with exit code 0
+
+Buffer fast loader
+FPS per sec 84.47227327458111
+Hash calculation time:  391.8563892841339
+
+Process finished with exit code 0
+
+6
+Buffer torch loader
+FPS per sec 81.04717604002124
+Hash calculation time:  408.41645097732544
+
+Process finished with exit code 0
+
+Buffer fast loader
+FPS per sec 61.48967431860497
+Hash calculation time:  538.3180243968964
+
+Process finished with exit code 0

@@ -29,7 +29,10 @@ class img_dataloader():
             if filename.split('.')[-1].lower() in self.img_extensions:
                 self.imgname_queue.put(filename)
 
+        # number of image need to process
         self.img_num = self.imgname_queue.qsize()
+        # number of processed image
+        self.processed_img_num = 0
 
         for i in range(num_cores):
             self.workers.append(Worker(self.imagelist, self.datapath, self.imgname_queue, self.queue_lock, self.imglist_lock))
@@ -39,22 +42,25 @@ class img_dataloader():
 
     def __getitem__(self):
         read_to_idx = self.batch_size
-        if self.imgname_queue.qsize() == 0:
+        left_image_num = self.img_num - self.processed_img_num
+        if self.img_num == self.processed_img_num:
             return None, None
-        elif self.imgname_queue.qsize() <= self.batch_size:
-            read_to_idx = self.imgname_queue.qsize()
+        elif left_image_num <= self.batch_size:
+            # wait until all image within last batch are parsed
+            while len(self.imagelist) != left_image_num:
+                time.sleep(0.1)
+            read_to_idx = left_image_num
 
+        # wait until image list is longer or equal to a batch
         while len(self.imagelist) < read_to_idx:
             time.sleep(0.1)
-            print("in loop ", len(self.imagelist), "IDX: ", read_to_idx)
 
         image_datalist = self.imagelist[:read_to_idx]
+        self.processed_img_num += read_to_idx
 
         self.imglist_lock.acquire()
-        print("acquired ", len(self.imagelist))
         del self.imagelist[:read_to_idx]
         self.imglist_lock.release()
-        print("release ", len(self.imagelist))
 
         return [x[0] for x in image_datalist], [y[0] for y in image_datalist]
 
@@ -98,9 +104,15 @@ class Worker(threading.Thread):
 
 
 if __name__ == "__main__":
-    dataloader = img_dataloader(r'C:\Users\fuchi\Desktop\working\abc', 256)
+    start = time.time()
+    dataloader = img_dataloader(r'C:\Users\fuchi\Desktop\working\Buffer', 512)
+    num_vec = 0
     image, label = dataloader.__getitem__()
     while image is not None:
-        print("read ", len(image))
+        num_vec += len(image)
+        print("read ", num_vec)
         image, label = dataloader.__getitem__()
 
+    hash_cal_end = time.time()
+    print(f"FPS per sec {num_vec / (hash_cal_end - start)}")
+    print("Hash calculation time: ", hash_cal_end - start)
